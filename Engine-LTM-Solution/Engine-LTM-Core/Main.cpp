@@ -3,9 +3,13 @@
 #include <iostream>
 #include <algorithm>
 #include <string>
+#include <cstdint>
+#include <bitset>
+#include "Linkage.h"
+#include <fstream>
 
 #pragma region MACROES, ASSERTIONS, STATIC ASSERTIONS
-void f() {
+void f() {					
 #ifdef _DEBUG
 	printf("Calling f in debug mode\n");
 #else
@@ -498,6 +502,84 @@ public:
 	}
 };
 #pragma endregion
+#pragma region RAII
+class MapSiteJanitor {
+public:
+	MapSiteJanitor() {
+
+	}
+	MapSiteJanitor(MapSite* s) {
+		site = s;
+		printf("Site created\n");
+	}
+
+	~MapSiteJanitor() {
+		delete site;
+		printf("Site deleted\n");
+	}
+
+private:
+	MapSite* site;
+};
+#pragma endregion
+#pragma region ULP, Machine Epsilon
+float calcFloatULP(float f) {
+	int exp;
+	std::frexp(std::fabs(f), &exp);
+	float result = std::ldexp(std::numeric_limits<float>::epsilon(), exp - 1);
+
+	return result;
+}
+#pragma endregion
+#pragma region Endianess
+std::uint32_t swapU32(std::uint32_t value) {
+	return (
+		((value & 0x000000FF) << 24)
+		| ((value & 0x0000FF00) << 8)
+		| ((value & 0x00FF0000) << 8)
+		| ((value & 0xFF000000) >> 24)
+		);
+}
+#pragma endregion
+#pragma region Linkage
+
+inline extern int max(int a, int b);
+
+union U32F32 {
+	float asF32;
+	std::uint32_t asU32;
+};
+float swapF32(float value) {
+	U32F32 u;
+
+	u.asF32 = value;
+	u.asU32 = swapU32(u.asU32);
+	return u.asF32;
+}
+void write_to_file(std::string filename) {
+	std::uint32_t n = 13;
+	float f = 32.125f;
+	std::ofstream fs(filename, std::ios::out | std::ios::binary);
+
+	n = swapU32(n);
+	f = swapF32(f);
+	//fs.write(reinterpret_cast<const char*>(&n), sizeof n);
+	fs.write(reinterpret_cast<const char*>(&f), sizeof f);
+	fs.close();
+}
+#pragma endregion
+#pragma region Packing
+struct BestPacking {
+	std::uint32_t mu1;
+	std::float_t mu2;
+	std::int32_t mI4;
+	char* mP6;
+	std::uint_fast8_t mB3;
+	bool m85;
+	std::uint8_t _pad[2];
+};
+#pragma endregion
+
 
 int main() {
 
@@ -506,7 +588,7 @@ int main() {
 	ASSERT(5 != 5);
 	STATIC_ASSERT(sizeof(NeedsToBe128Bytes) == 128, "Wrong size");*/
 
-	auto m = std::make_shared<Maze>();
+	/*auto m = std::make_shared<Maze>();
 	auto w = std::make_shared<Wall>();
 	auto r = std::make_shared<Room>();
 	auto bw = std::make_shared<BombedWall>(true);
@@ -519,6 +601,17 @@ int main() {
 	auto maze = MazeGame::CreateMaze(&ef);
 
 	printf(maze->ToString().c_str());
+	printf("\n");
+
+	{
+		printf("Do something here, then\n");
+		MapSiteJanitor janitor(new Room());
+		printf("Do something else here\n");
+	}*/
+
+	//write_to_file("endianess.bin");
+
+	std::cout << max(1, 2) << std::endl;
 
 	system("pause");
 }
