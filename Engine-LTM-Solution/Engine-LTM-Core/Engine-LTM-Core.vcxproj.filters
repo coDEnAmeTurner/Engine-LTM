@@ -21,6 +21,9 @@
     <ClCompile Include="Linkage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Predication.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Linkage.h">

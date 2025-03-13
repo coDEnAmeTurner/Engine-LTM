@@ -580,6 +580,7 @@ struct BestPacking {
 };
 #pragma endregion
 
+inline extern void test_parallel_concurrency();
 
 int main() {
 
@@ -611,7 +612,9 @@ int main() {
 
 	//write_to_file("endianess.bin");
 
-	std::cout << max(1, 2) << std::endl;
+	//std::cout << max(1, 2) << std::endl;
+
+	test_parallel_concurrency();
 
 	system("pause");
 }
