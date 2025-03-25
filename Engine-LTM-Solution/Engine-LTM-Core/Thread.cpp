@@ -1,14 +1,10 @@
 #ifdef TEST_THREAD
-#define _GNU_SOURCE  // Required for CPU_SET macros
 #include <iostream>
 #include <pthread.h>
 #include <Windows.h>
 #include <string>
 #include <thread>
-#include <boost/asio.hpp>
-#include <boost/asio/co_spawn.hpp>
-#include <boost/asio/detached.hpp>
-#include <boost/asio/use_awaitable.hpp>
+#include "stack_context.h"
 
 struct multiple_params {
 	std::uint32_t ui32;
@@ -248,7 +244,13 @@ void* threadb_entry_point(void* fiberf) {
 }
 #pragma endregion
 #pragma region Coroutines
+void coroutine(void* arg) {
+	std::cout << "Coroutine: Started\n";
 
+	std::cout << "Coroutine: Resumed\n";
+
+	std::cout << "Coroutine: Finished\n";
+}
 #pragma endregion
 
 
@@ -395,7 +397,10 @@ void test_parallel_concurrency() {
 	*/
 
 	//Coroutines
-	
+	unsigned char stack[(36 + 8) * sizeof(void*)]; //36 * sizeof(void*) is the least size the stack must have
+	stack_context ctx(static_cast<void*>(stack), static_cast<size_t>(sizeof(stack)), coroutine, nullptr);
+	ctx.switch_into();
+	ctx.switch_out_of();
 }
 
 #endif

@@ -1,10 +1,5 @@
-global switch_to_context
-global stack_switch_finish
-global callable_context_start
-
-section .text
-
-switch_to_context:
+.code
+switch_to_context proc
 	; Store NT_TIB stack info memberss
 	push qword [gs:8]
 	push qword [gs:16]
@@ -33,9 +28,11 @@ switch_to_context:
 
 	; Store stack pointer
 	move [rcx], rsp
-	ret
+switch_to_context endp
+end switch_to_context
 
-stack_switch_finish:
+.code
+stack_switch_finish proc
 	move rsp, rdx
 
 	; Restore XMM registers manually
@@ -65,9 +62,14 @@ stack_switch_finish:
 	push qword [gs:8]
 
 	ret
+stack_switch_finish endp
+end stack_switch_finish
 
-callable_context_start:
+.code
+callable_context_start proc
 	move rcx, rdi
 	call rbp
 	move rdx, [rbx]
 	jmp stack_switch_finish
+callable_context_start endp
+end callable_context_start
