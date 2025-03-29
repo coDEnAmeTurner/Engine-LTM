@@ -5,6 +5,8 @@
 #include <string>
 #include <thread>
 #include "stack_context.h"
+#include <intrin.h>
+#include <boost/context/continuation.hpp>
 
 struct multiple_params {
 	std::uint32_t ui32;
@@ -189,7 +191,7 @@ void WINAPI FiberFunction(void* param) {
 		return;
 
 	SwitchToFiber(fparams.parent_fiber);
-	
+
 }
 void WINAPI FiberFunction_F(void* param) {
 	std::uint32_t* fiber_control_block_add = (std::uint32_t*)GetCurrentFiber();
@@ -243,7 +245,7 @@ void* threadb_entry_point(void* fiberf) {
 	return nullptr;
 }
 #pragma endregion
-#pragma region Coroutines
+#pragma region Handmade Coroutines
 void coroutine(void* arg) {
 	std::cout << "Coroutine: Started\n";
 
@@ -251,6 +253,45 @@ void coroutine(void* arg) {
 
 	std::cout << "Coroutine: Finished\n";
 }
+void check_stack_inside_cout() {
+	void* rsp;
+#ifdef _MSC_VER
+	rsp = (void*)_AddressOfReturnAddress();
+#else
+	__asm__ volatile("movq %%rsp, %0" : "=r"(rsp));
+#endif
+	std::cout << "Inside std::cout, Stack pointer: " << rsp << "\n";
+}
+#pragma endregion
+#pragma region Boost Coroutines
+namespace ctx = boost::context;
+ctx::continuation coroutine2(ctx::continuation&& c) {
+	std::cout << "Coroutine 2: A" << std::endl;
+	c = c.resume();
+
+	std::cout << "Coroutine 2: B" << std::endl;
+	c = c.resume();
+
+	std::cout << "Coroutine 2: C" << std::endl;
+	c = c.resume();
+
+	return std::move(c);
+}
+
+ctx::continuation coroutine1(ctx::continuation&& c) {
+	std::cout << "Coroutine 1: 1" << std::endl;
+	c = c.resume_with(coroutine2);
+
+	std::cout << "Coroutine 1: 2" << std::endl;
+	c = c.resume();
+
+	std::cout << "Coroutine 1: 3" << std::endl;
+	c = c.resume();
+
+	std::cout << "Coroutine 1: Done" << std::endl;
+	return std::move(c);
+}
+
 #pragma endregion
 
 
@@ -314,7 +355,7 @@ void test_parallel_concurrency() {
 	// 1 has the most priority but Runnable last
 	//The last one seems to take more core time
 	/*pthread_t threads[3];
-	int core_id = 0;	
+	int core_id = 0;
 
 	if (pthread_create(&threads[0], nullptr, always_print, &core_id) != 0) {
 		std::cerr << "error creating thread\n";
@@ -397,10 +438,34 @@ void test_parallel_concurrency() {
 	*/
 
 	//Coroutines
-	unsigned char stack[(36 + 8) * sizeof(void*)]; //36 * sizeof(void*) is the least size the stack must have
-	stack_context ctx(static_cast<void*>(stack), static_cast<size_t>(sizeof(stack)), coroutine, nullptr);
-	ctx.switch_into();
-	ctx.switch_out_of();
+	//unsigned char stack[(900 + 36) * sizeof(void*)]; //36 * sizeof(void*) is the least size the stack must have
+	//stack_context ctx(static_cast<void*>(stack), static_cast<size_t>(sizeof(stack)), coroutine, nullptr);
+	//ctx.switch_into();
+
+	//Calc how many stack frames for cout
+	/*void* rsp_before;
+	void* rsp_after;
+
+#ifdef _MSC_VER
+	rsp_before = (void*)_AddressOfReturnAddress();
+#else
+	__asm__ volatile("movq %%rsp, %0" : "=r"(rsp_before));
+#endif
+	std::cout << "Before std::cout, Stack pointer: " << rsp_before << "\n";
+
+	check_stack_inside_cout(); // Capture RSP inside std::cout
+
+#ifdef _MSC_VER
+	rsp_after = (void*)_AddressOfReturnAddress();
+#else
+	__asm__ volatile("movq %%rsp, %0" : "=r"(rsp_after));
+#endif
+	std::cout << "After std::cout, Stack pointer: " << rsp_after << "\n";*/
+
+	//Using coroutine in Boost libary
+	ctx::continuation c = ctx::callcc(coroutine1);
+	std::cout << "Main: Coroutines finsihed " << std::endl;
+
 }
 
 #endif
