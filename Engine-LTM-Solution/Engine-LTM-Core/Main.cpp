@@ -616,5 +616,5 @@ int main() {
 
 	test_parallel_concurrency();
 
-	system("pause");
+	//std::cin.get();
 }
