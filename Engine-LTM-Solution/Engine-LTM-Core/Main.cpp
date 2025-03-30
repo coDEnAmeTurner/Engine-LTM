@@ -5,7 +5,7 @@
 #include <string>
 #include <cstdint>
 #include <bitset>
-#include "Linkage.h"
+#include "Implicit Parallelism/Linkage.h"
 #include <fstream>
 
 #pragma region MACROES, ASSERTIONS, STATIC ASSERTIONS
