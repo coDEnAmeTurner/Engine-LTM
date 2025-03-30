@@ -3,10 +3,24 @@
 #include <iostream>
 #include <thread>
 #include <Windows.h>
+#include <queue>
 
 int g_count = 0;
+int g_count_cv = 0;
+std::queue<int> g_queue;
 std::mutex	g_mutex;
+bool g_ready = false;
+bool g_stop = false;
+int result = 0;
 CRITICAL_SECTION g_critsec;
+
+void ProduceDataInto(std::queue<int>& g_queue) {
+	g_queue.push(g_count_cv);
+}
+void ConsumeDataFrom(std::queue<int>& g_queue) {
+	result += g_queue.front();
+	g_queue.pop();
+}
 
 #pragma region Critical Section and Mutex
 inline void IncrementCountT1() {
@@ -15,7 +29,7 @@ inline void IncrementCountT1() {
 
 	int lo_count = g_count;
 	//this is to simulate it blocks because of some blocking system call
-	std::this_thread::sleep_for(std::chrono::seconds(2));
+	std::this_thread::sleep_for(std::chrono::seconds(1));
 	lo_count = lo_count + 1;
 	g_count = lo_count;
 
@@ -49,7 +63,78 @@ void setThreadAffinity(std::thread& t, int core_id) {
 	}
 }
 #pragma endregion
+#pragma region Condition Variables
+void ProducerThread() {
+	while (true) {
 
+		if (g_count_cv <= 5)
+		{
+			g_mutex.lock();
+			ProduceDataInto(g_queue);
+			g_mutex.unlock();
+		}
+
+		g_mutex.lock();
+		g_ready = true;
+		g_mutex.unlock();
+
+
+		if (g_count_cv > 5)
+		{
+			g_mutex.lock();
+			g_stop = true;
+			g_mutex.unlock();
+			return;
+		}
+		g_count_cv++;
+
+		std::this_thread::yield();
+	}
+
+}
+void ConsumerThread() {
+	while (true) {
+		//loop (wait) till the queue is ready to be consumed
+		while (true) {
+			g_mutex.lock();
+			const bool ready = g_ready;
+			g_mutex.unlock();
+			if (ready)
+			{
+				break;
+			}
+
+		}
+
+		//wait finished, now consume!!!
+		g_mutex.lock();
+		if (g_stop)
+		{
+			g_ready = false;
+			g_mutex.unlock();
+
+			return;
+		}
+		g_mutex.unlock();
+
+		g_mutex.lock();
+		ConsumeDataFrom(g_queue);
+		g_mutex.unlock();
+
+		g_mutex.lock();
+		g_ready = false;
+		g_mutex.unlock();
+
+		std::this_thread::yield();
+
+	}
+
+}
+
+#pragma endregion
+
+
+#pragma region Driver
 void Demo_CriticalSection_And_Mutex() {
 	InitializeCriticalSection(&g_critsec);
 
@@ -67,10 +152,26 @@ void Demo_CriticalSection_And_Mutex() {
 	DeleteCriticalSection(&g_critsec);
 	std::cout << "g_count after incremented: " << g_count << "\n";
 }
+void Demo_Condition_Variables() {
+	std::cout << "Result before: " << result << "\n";
+
+	std::thread t1(ProducerThread);
+	std::thread t2(ConsumerThread);
+
+	setThreadAffinity(t1, 1);
+	setThreadAffinity(t2, 1);
+
+	t1.join();
+	t2.join();
+
+	std::cout << "Result after: " << result << "\n";
+
+}
+#pragma endregion
 
 void test_parallel_concurrency() {
 	Demo_CriticalSection_And_Mutex();
 
-
+	Demo_Condition_Variables();
 }
 #endif
