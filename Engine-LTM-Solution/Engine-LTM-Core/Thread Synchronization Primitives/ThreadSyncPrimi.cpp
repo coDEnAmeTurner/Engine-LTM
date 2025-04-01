@@ -12,14 +12,20 @@ std::mutex	g_mutex;
 bool g_ready = false;
 bool g_stop = false;
 int result = 0;
+std::condition_variable g_cv;
 CRITICAL_SECTION g_critsec;
 
 void ProduceDataInto(std::queue<int>& g_queue) {
-	g_queue.push(g_count_cv);
+	g_queue.push(g_count_cv++);
+	std::cout << "[Producer] Produced: " << g_count_cv - 1 << "\n";
 }
 void ConsumeDataFrom(std::queue<int>& g_queue) {
-	result += g_queue.front();
-	g_queue.pop();
+	while (!g_queue.empty())
+	{
+		int data = g_queue.front();
+		g_queue.pop();
+		std::cout << "[Consumer] Consumed: " << data << "\n";
+	}
 }
 
 #pragma region Critical Section and Mutex
@@ -64,7 +70,7 @@ void setThreadAffinity(std::thread& t, int core_id) {
 }
 #pragma endregion
 #pragma region Condition Variables
-void ProducerThread() {
+void ProducerThread_mutex() {
 	while (true) {
 
 		if (g_count_cv <= 5)
@@ -92,7 +98,7 @@ void ProducerThread() {
 	}
 
 }
-void ConsumerThread() {
+void ConsumerThread_mutex() {
 	while (true) {
 		//loop (wait) till the queue is ready to be consumed
 		while (true) {
@@ -130,7 +136,42 @@ void ConsumerThread() {
 	}
 
 }
+void ProducerThread_cv() {
+	while (true) {
+		std::unique_lock<std::mutex> lock(g_mutex);
+		if (g_queue.size() <= 4)
+		{
+			ProduceDataInto(g_queue);
+			g_ready = true;
+			g_cv.notify_one();
+		}
+		else
+		{
+			g_ready = true;
+			g_stop = true;
+			g_cv.notify_one();
+			std::cout << "Done producing!!!\n";
+			return;
+		}
+	}
+}
+void ConsumerThread_cv() {
+	while (true) {
+		std::unique_lock<std::mutex> lock(g_mutex);
+		g_cv.wait(lock, []() {return g_ready || g_stop; });
 
+		if (!g_stop || !g_queue.empty())
+		{
+			ConsumeDataFrom(g_queue);
+			g_ready = false;
+		}
+		else
+		{
+			std::cout << "Done consuming!!!\n";
+			return;
+		}
+	}
+}
 #pragma endregion
 
 
@@ -152,11 +193,11 @@ void Demo_CriticalSection_And_Mutex() {
 	DeleteCriticalSection(&g_critsec);
 	std::cout << "g_count after incremented: " << g_count << "\n";
 }
-void Demo_Condition_Variables() {
+void Demo_Condition_Variables_mutex() {
 	std::cout << "Result before: " << result << "\n";
 
-	std::thread t1(ProducerThread);
-	std::thread t2(ConsumerThread);
+	std::thread t1(ProducerThread_mutex);
+	std::thread t2(ConsumerThread_mutex);
 
 	setThreadAffinity(t1, 1);
 	setThreadAffinity(t2, 1);
@@ -167,11 +208,25 @@ void Demo_Condition_Variables() {
 	std::cout << "Result after: " << result << "\n";
 
 }
+void Demo_Condition_Variables_cv() {
+	std::thread t1(ProducerThread_cv);
+	std::thread t2(ConsumerThread_cv);
+
+	setThreadAffinity(t1, 1);
+	setThreadAffinity(t2, 1);
+
+	t1.join();
+	t2.join();
+
+	std::cout << "Finished: cv\n";
+}
 #pragma endregion
 
 void test_parallel_concurrency() {
-	Demo_CriticalSection_And_Mutex();
+	//Demo_CriticalSection_And_Mutex();
 
-	Demo_Condition_Variables();
+	//Demo_Condition_Variables_mutex();
+
+	Demo_Condition_Variables_cv();
 }
 #endif
