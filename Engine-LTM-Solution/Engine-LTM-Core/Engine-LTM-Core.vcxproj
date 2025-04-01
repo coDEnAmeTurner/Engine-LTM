@@ -110,6 +110,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\Admin\AppData\Local\vcpkg\archives\ae\include;D:\Boost\boost_1_87_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -128,6 +129,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\Admin\AppData\Local\vcpkg\archives\ae\include;D:\Boost\boost_1_87_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,11 +146,17 @@
     <ClCompile Include="Implicit Parallelism\Predication.cpp" />
     <ClCompile Include="Handmade Context Switch\stack_context.cpp" />
     <ClCompile Include="OS Fundamentals\Thread.cpp" />
+    <ClCompile Include="Thread Synchronization Primitives\HandmadeSemaphore\HandmadeSemaphore.cpp" />
+    <ClCompile Include="Thread Synchronization Primitives\ResourcePool\ResourcePool.cpp" />
+    <ClCompile Include="Thread Synchronization Primitives\Producer_Consumers_Semaphores.cpp" />
+    <ClCompile Include="Thread Synchronization Primitives\ResourcePool\ResourcePool_Semaphores.cpp" />
     <ClCompile Include="Thread Synchronization Primitives\ThreadSyncPrimi.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Implicit Parallelism\Linkage.h" />
     <ClInclude Include="Handmade Context Switch\stack_context.h" />
+    <ClInclude Include="Thread Synchronization Primitives\HandmadeSemaphore\HandmadeSemaphore.h" />
+    <ClInclude Include="Thread Synchronization Primitives\ResourcePool\ResourcePool.h" />
   </ItemGroup>
   <ItemGroup>
     <MASM Include="Handmade Context Switch\context_switch.asm" />

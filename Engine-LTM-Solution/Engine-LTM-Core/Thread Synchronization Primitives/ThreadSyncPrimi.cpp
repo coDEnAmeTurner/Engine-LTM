@@ -173,6 +173,11 @@ void ConsumerThread_cv() {
 	}
 }
 #pragma endregion
+#pragma region Semaphores
+extern void Demo_ResourcePool_Semaphores();
+extern void ProducerThreadSem();
+extern void ConsumerThreadSem();
+#pragma endregion
 
 
 #pragma region Driver
@@ -220,6 +225,18 @@ void Demo_Condition_Variables_cv() {
 
 	std::cout << "Finished: cv\n";
 }
+void Demo_Producer_Consumer_Sem() {
+	std::thread t1(ProducerThreadSem);
+	std::thread t2(ConsumerThreadSem);
+
+	setThreadAffinity(t1, 1);
+	setThreadAffinity(t2, 1);
+
+	t1.join();
+	t2.join();
+
+	std::cout << "Finished: sem\n";
+}
 #pragma endregion
 
 void test_parallel_concurrency() {
@@ -227,6 +244,10 @@ void test_parallel_concurrency() {
 
 	//Demo_Condition_Variables_mutex();
 
-	Demo_Condition_Variables_cv();
+	/*Demo_Condition_Variables_cv();
+
+	Demo_ResourcePool_Semaphores();*/
+
+	Demo_Producer_Consumer_Sem();
 }
 #endif
