@@ -20,7 +20,7 @@ void ProduceDataInto(std::queue<int>& g_queue) {
 	std::cout << "[Producer] Produced: " << g_count_cv - 1 << "\n";
 }
 void ConsumeDataFrom(std::queue<int>& g_queue) {
-	if (!g_queue.empty())
+	while (!g_queue.empty())
 	{
 		int data = g_queue.front();
 		g_queue.pop();
@@ -139,18 +139,37 @@ void ConsumerThread_mutex() {
 void ProducerThread_cv() {
 	while (true) {
 		std::unique_lock<std::mutex> lock(g_mutex);
-		ProduceDataInto(g_queue);
-		g_ready = true;
-		g_cv.notify_one();
+		if (g_queue.size() <= 4)
+		{
+			ProduceDataInto(g_queue);
+			g_ready = true;
+			g_cv.notify_one();
+		}
+		else
+		{
+			g_ready = true;
+			g_stop = true;
+			g_cv.notify_one();
+			std::cout << "Done producing!!!\n";
+			return;
+		}
 	}
-
 }
 void ConsumerThread_cv() {
 	while (true) {
 		std::unique_lock<std::mutex> lock(g_mutex);
-		g_cv.wait(lock, []() {return g_ready; });
-		ConsumeDataFrom(g_queue);
-		g_ready = false;
+		g_cv.wait(lock, []() {return g_ready || g_stop; });
+
+		if (!g_stop || !g_queue.empty())
+		{
+			ConsumeDataFrom(g_queue);
+			g_ready = false;
+		}
+		else
+		{
+			std::cout << "Done consuming!!!\n";
+			return;
+		}
 	}
 }
 #pragma endregion
@@ -199,6 +218,7 @@ void Demo_Condition_Variables_cv() {
 	t1.join();
 	t2.join();
 
+	std::cout << "Finished: cv\n";
 }
 #pragma endregion
 
