@@ -146,6 +146,10 @@
     <ClCompile Include="Implicit Parallelism\Predication.cpp" />
     <ClCompile Include="Handmade Context Switch\stack_context.cpp" />
     <ClCompile Include="OS Fundamentals\Thread.cpp" />
+    <ClCompile Include="Thread Synchronization Primitives\Dining_Philosophers\DP_Central_Arbiter\CentralArbiter.cpp" />
+    <ClCompile Include="Thread Synchronization Primitives\Dining_Philosophers\DP_Central_Arbiter\DP_CentralArbiter.cpp" />
+    <ClCompile Include="Thread Synchronization Primitives\Dining_Philosophers\DP_Global_Order\DP_Global_Order.cpp" />
+    <ClCompile Include="Thread Synchronization Primitives\Dining_Philosophers\DP_NMinus1_Philo\DP_NMinus1_Philo.cpp" />
     <ClCompile Include="Thread Synchronization Primitives\HandmadeSemaphore\HandmadeSemaphore.cpp" />
     <ClCompile Include="Thread Synchronization Primitives\ResourcePool\ResourcePool.cpp" />
     <ClCompile Include="Thread Synchronization Primitives\Producer_Consumers_Semaphores.cpp" />
@@ -155,6 +159,8 @@
   <ItemGroup>
     <ClInclude Include="Implicit Parallelism\Linkage.h" />
     <ClInclude Include="Handmade Context Switch\stack_context.h" />
+    <ClInclude Include="Thread Synchronization Primitives\Dining_Philosophers\DP_Central_Arbiter\CentralArbiter.h" />
+    <ClInclude Include="Thread Synchronization Primitives\Dining_Philosophers\DP_Common.h" />
     <ClInclude Include="Thread Synchronization Primitives\HandmadeSemaphore\HandmadeSemaphore.h" />
     <ClInclude Include="Thread Synchronization Primitives\ResourcePool\ResourcePool.h" />
   </ItemGroup>

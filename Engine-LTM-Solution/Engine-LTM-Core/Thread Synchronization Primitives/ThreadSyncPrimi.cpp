@@ -178,8 +178,11 @@ extern void Demo_ResourcePool_Semaphores();
 extern void ProducerThreadSem();
 extern void ConsumerThreadSem();
 #pragma endregion
-
-
+#pragma region Dining Philosophers
+extern void DS_Global_Order();
+extern void DS_Central_Arbiter();
+extern void DS_NMinus1_Philo();
+#pragma endregion
 #pragma region Driver
 void Demo_CriticalSection_And_Mutex() {
 	InitializeCriticalSection(&g_critsec);
@@ -237,6 +240,11 @@ void Demo_Producer_Consumer_Sem() {
 
 	std::cout << "Finished: sem\n";
 }
+void Demo_DiningPhilosophers() {
+	//DS_Global_Order();
+
+	DS_Central_Arbiter();
+}
 #pragma endregion
 
 void test_parallel_concurrency() {
@@ -248,6 +256,11 @@ void test_parallel_concurrency() {
 
 	Demo_ResourcePool_Semaphores();*/
 
-	Demo_Producer_Consumer_Sem();
+	//Demo_Producer_Consumer_Sem();
+
+	//DS_Global_Order();
+
+	DS_NMinus1_Philo();
+
 }
 #endif
