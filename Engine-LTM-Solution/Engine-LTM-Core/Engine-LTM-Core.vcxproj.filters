@@ -15,6 +15,8 @@
     <ClCompile Include="Thread Synchronization Primitives\Dining_Philosophers\DP_Central_Arbiter\CentralArbiter.cpp" />
     <ClCompile Include="Thread Synchronization Primitives\Dining_Philosophers\DP_Central_Arbiter\DP_CentralArbiter.cpp" />
     <ClCompile Include="Thread Synchronization Primitives\Dining_Philosophers\DP_NMinus1_Philo\DP_NMinus1_Philo.cpp" />
+    <ClCompile Include="Non-Blocking Programming\Non_Blocking_Programming.cpp" />
+    <ClCompile Include="Non-Blocking Programming\SpinLock\SpinLockTAS.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Implicit Parallelism\Linkage.h" />
