@@ -106,11 +106,12 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>USER_NONDEBUG;ASSERTIONS_ENABLED;THREAD_SYNCHRONIZATION_PRIMITIVES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USER_NONDEBUG;ASSERTIONS_ENABLED;NON_BLOCKING_PROGRAMMING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\Admin\AppData\Local\vcpkg\archives\ae\include;D:\Boost\boost_1_87_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -125,11 +126,12 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>USER_NONDEBUG;ASSERTIONS_ENABLED;THREAD_SYNCHRONIZATION_PRIMITIVES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USER_NONDEBUG;ASSERTIONS_ENABLED;NON_BLOCKING_PROGRAMMING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\Admin\AppData\Local\vcpkg\archives\ae\include;D:\Boost\boost_1_87_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -145,6 +147,13 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Implicit Parallelism\Predication.cpp" />
     <ClCompile Include="Handmade Context Switch\stack_context.cpp" />
+    <ClCompile Include="Non-Blocking Programming\Memory Ordering Semantics\Demo_MO_Semantics.cpp" />
+    <ClCompile Include="Non-Blocking Programming\Memory Ordering Semantics\ReentrantLock32\ReentrantLock32.cpp" />
+    <ClCompile Include="Non-Blocking Programming\Non_Blocking_Programming.cpp" />
+    <ClCompile Include="Non-Blocking Programming\SpinLock\CAS.cpp" />
+    <ClCompile Include="Non-Blocking Programming\SpinLock\LL_SC.cpp" />
+    <ClCompile Include="Non-Blocking Programming\SpinLock\SpinLockTAS_ReentrantLock.cpp" />
+    <ClCompile Include="Non-Blocking Programming\SpinLock\SpinLockXCHG.cpp" />
     <ClCompile Include="OS Fundamentals\Thread.cpp" />
     <ClCompile Include="Thread Synchronization Primitives\Dining_Philosophers\DP_Central_Arbiter\CentralArbiter.cpp" />
     <ClCompile Include="Thread Synchronization Primitives\Dining_Philosophers\DP_Central_Arbiter\DP_CentralArbiter.cpp" />
@@ -159,6 +168,7 @@
   <ItemGroup>
     <ClInclude Include="Implicit Parallelism\Linkage.h" />
     <ClInclude Include="Handmade Context Switch\stack_context.h" />
+    <ClInclude Include="Non-Blocking Programming\Memory Ordering Semantics\ReentrantLock32\ReentrantLock32.h" />
     <ClInclude Include="Thread Synchronization Primitives\Dining_Philosophers\DP_Central_Arbiter\CentralArbiter.h" />
     <ClInclude Include="Thread Synchronization Primitives\Dining_Philosophers\DP_Common.h" />
     <ClInclude Include="Thread Synchronization Primitives\HandmadeSemaphore\HandmadeSemaphore.h" />
