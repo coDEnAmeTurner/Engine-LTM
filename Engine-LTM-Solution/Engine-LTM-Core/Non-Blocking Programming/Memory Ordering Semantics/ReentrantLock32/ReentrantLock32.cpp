@@ -1,6 +1,10 @@
 #include "ReentrantLock32.h"
 #include <thread>
+#include <iostream>
 #include <assert.h>
+#include "../ScopedLock/ScopedLock.h"
+
+thread_local int ReentrantLock32::m_refcount = 0;
 
 void ReentrantLock32::Acquire() {
 	std::hash<std::thread::id> hasher;
@@ -68,4 +72,35 @@ bool ReentrantLock32::TryAcquire() {
 	}
 
 	return acquired;
+}
+
+std::uint32_t g_data_re = 0;
+std::uint32_t g_ready_re = 0;
+ReentrantLock32 reen_spinlock;
+
+void ProducerThread_reen() {
+	//setThreadAffinity(0); // Set thread 1 to core 0
+
+	ScopedLock<ReentrantLock32> lock(&reen_spinlock);
+	g_data_re = 42;
+	g_ready_re = true;
+}
+
+void ConsumerThread_reen() {
+	//setThreadAffinity(1); // Set thread 1 to core 1
+	bool first_it = true;
+	reen_spinlock.Acquire();
+	while (!g_ready_re) {
+		if (first_it)
+		{
+			first_it = false;
+			reen_spinlock.Release();
+		}
+
+	}
+	if (first_it)
+		reen_spinlock.Release();
+
+	ScopedLock<ReentrantLock32> lock(&reen_spinlock);
+	std::cout << "Data: " << g_data_re << std::endl; // Should print 42
 }
