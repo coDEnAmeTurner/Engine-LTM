@@ -9,7 +9,7 @@ inline extern void Demo_MO_Semantics();
 #pragma endregion
 
 void test_parallel_concurrency() {
-	Demo_SpinLockTAS();
+	//Demo_SpinLockTAS();
 
 	//Demo_SpinLockXCHG();
 
@@ -17,7 +17,7 @@ void test_parallel_concurrency() {
 
 	//Demo_SpinLock_LLSC();
 
-	//Demo_MO_Semantics();
+	Demo_MO_Semantics();
 
 }
 

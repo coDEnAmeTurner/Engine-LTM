@@ -147,7 +147,10 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Implicit Parallelism\Predication.cpp" />
     <ClCompile Include="Handmade Context Switch\stack_context.cpp" />
+    <ClCompile Include="Non-Blocking Programming\Memory Ordering Semantics\BasicSpinLock\BasicSpinLock.cpp" />
     <ClCompile Include="Non-Blocking Programming\Memory Ordering Semantics\Demo_MO_Semantics.cpp" />
+    <ClCompile Include="Non-Blocking Programming\Memory Ordering Semantics\Lock-Free Linked List\LF_LinkedList.cpp" />
+    <ClCompile Include="Non-Blocking Programming\Memory Ordering Semantics\Lock-Not-Needed Assertion\UnnecessaryLock.cpp" />
     <ClCompile Include="Non-Blocking Programming\Memory Ordering Semantics\ReentrantLock32\ReentrantLock32.cpp" />
     <ClCompile Include="Non-Blocking Programming\Non_Blocking_Programming.cpp" />
     <ClCompile Include="Non-Blocking Programming\SpinLock\CAS.cpp" />
@@ -168,7 +171,11 @@
   <ItemGroup>
     <ClInclude Include="Implicit Parallelism\Linkage.h" />
     <ClInclude Include="Handmade Context Switch\stack_context.h" />
+    <ClInclude Include="Non-Blocking Programming\Memory Ordering Semantics\BasicSpinLock\BasicSpinLock.h" />
+    <ClInclude Include="Non-Blocking Programming\Memory Ordering Semantics\Lock-Free Linked List\LF_LinkedList.h" />
+    <ClInclude Include="Non-Blocking Programming\Memory Ordering Semantics\Lock-Not-Needed Assertion\UnnecessaryLock.h" />
     <ClInclude Include="Non-Blocking Programming\Memory Ordering Semantics\ReentrantLock32\ReentrantLock32.h" />
+    <ClInclude Include="Non-Blocking Programming\Memory Ordering Semantics\ScopedLock\ScopedLock.h" />
     <ClInclude Include="Thread Synchronization Primitives\Dining_Philosophers\DP_Central_Arbiter\CentralArbiter.h" />
     <ClInclude Include="Thread Synchronization Primitives\Dining_Philosophers\DP_Common.h" />
     <ClInclude Include="Thread Synchronization Primitives\HandmadeSemaphore\HandmadeSemaphore.h" />
