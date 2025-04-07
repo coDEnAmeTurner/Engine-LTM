@@ -106,7 +106,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>USER_NONDEBUG;ASSERTIONS_ENABLED;NON_BLOCKING_PROGRAMMING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USER_NONDEBUG;ASSERTIONS_ENABLED;SIMD_DEMO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\Admin\AppData\Local\vcpkg\archives\ae\include;D:\Boost\boost_1_87_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -126,7 +126,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>USER_NONDEBUG;ASSERTIONS_ENABLED;NON_BLOCKING_PROGRAMMING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USER_NONDEBUG;ASSERTIONS_ENABLED;SIMD_DEMO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\Admin\AppData\Local\vcpkg\archives\ae\include;D:\Boost\boost_1_87_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -158,6 +158,7 @@
     <ClCompile Include="Non-Blocking Programming\SpinLock\SpinLockTAS_ReentrantLock.cpp" />
     <ClCompile Include="Non-Blocking Programming\SpinLock\SpinLockXCHG.cpp" />
     <ClCompile Include="OS Fundamentals\Thread.cpp" />
+    <ClCompile Include="SIMD\Demo_SIMD.cpp" />
     <ClCompile Include="Thread Synchronization Primitives\Dining_Philosophers\DP_Central_Arbiter\CentralArbiter.cpp" />
     <ClCompile Include="Thread Synchronization Primitives\Dining_Philosophers\DP_Central_Arbiter\DP_CentralArbiter.cpp" />
     <ClCompile Include="Thread Synchronization Primitives\Dining_Philosophers\DP_Global_Order\DP_Global_Order.cpp" />
