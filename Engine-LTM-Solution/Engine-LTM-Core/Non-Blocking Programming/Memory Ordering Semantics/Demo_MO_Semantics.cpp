@@ -4,6 +4,7 @@
 #include <iostream>
 #include <Windows.h>
 #include "BasicSpinLock/BasicSpinLock.h"
+#include "Lock-Not-Needed Assertion/UnnecessaryLock.h"
 
 std::atomic<std::uint32_t> g_data = 0;
 std::atomic<std::uint32_t> g_ready = 0;
@@ -45,18 +46,26 @@ void ConsumerThread() {
 #pragma endregion
 #pragma region BasicSpinLock
 inline extern void ProducerThread_Basic();
-
 inline extern void ConsumerThread_Basic();
+#pragma endregion
+#pragma region ReentrantSpinLock
+inline extern void ProducerThread_reen();
+inline extern void ConsumerThread_reen();
+#pragma endregion
+#pragma region Lock not needed assertions
+inline extern void ThreadFunction_ul();
+inline extern void consume_from_LF_linked_list();
+inline extern void produce_into_LF_linked_list();
 #pragma endregion
 
 
 void Demo_MO_Semantics() {
 
-	std::thread t1(ProducerThread_Basic);
-	std::thread t2(ConsumerThread_Basic);
+	std::thread t1(produce_into_LF_linked_list);
+	std::thread t2(consume_from_LF_linked_list);
 
 	std::cout << "Thread 1: " << t1.get_id() << std::endl;
-	std::cout << "Thread 2: " <<  t2.get_id() << std::endl;
+	std::cout << "Thread 2: " << t2.get_id() << std::endl;
 
 	t1.join();
 	t2.join();
