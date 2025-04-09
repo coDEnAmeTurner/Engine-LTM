@@ -25,6 +25,7 @@
     <ClCompile Include="Non-Blocking Programming\Memory Ordering Semantics\BasicSpinLock\BasicSpinLock.cpp" />
     <ClCompile Include="Non-Blocking Programming\Memory Ordering Semantics\Lock-Not-Needed Assertion\UnnecessaryLock.cpp" />
     <ClCompile Include="Non-Blocking Programming\Memory Ordering Semantics\Lock-Free Linked List\LF_LinkedList.cpp" />
+    <ClCompile Include="SIMD\Demo_SIMD.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Implicit Parallelism\Linkage.h" />

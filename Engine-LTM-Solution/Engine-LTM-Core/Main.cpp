@@ -7,6 +7,8 @@
 #include <bitset>
 #include "Implicit Parallelism/Linkage.h"
 #include <fstream>
+#include <MyLibrary/MyLibrary.h>
+#include <MyLibrary_DLL/MyLibrary_DLL.h>
 
 #pragma region MACROES, ASSERTIONS, STATIC ASSERTIONS
 void f() {					
@@ -614,7 +616,12 @@ int main() {
 
 	//std::cout << max(1, 2) << std::endl;
 
-	test_parallel_concurrency();
+	//test_parallel_concurrency();
 
 	//std::cin.get();
+
+	PrintMessage();
+
+	PrintMessage_DLL();
+
 }
