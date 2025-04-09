@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{1d5c9b5d-336e-487c-91f0-bfc9b70c5614}</ProjectGuid>
-    <RootNamespace>EngineLTMCore</RootNamespace>
+    <ProjectGuid>{e745b57e-0b4c-4e51-9976-06bbb4299bd9}</ProjectGuid>
+    <RootNamespace>MyLibrary</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -40,13 +40,13 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -54,7 +54,6 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
@@ -71,9 +70,6 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ReferencePath>C:\Users\atuan\AppData\Local\vcpkg\archives\62\62f501e02f0f736e418382af82b6a58c2592b25aaf765cab98a811b604958489.zip\include;$(ReferencePath)</ReferencePath>
-  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -106,18 +102,12 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>USER_NONDEBUG;ASSERTIONS_ENABLED;SIMD_DEMO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Admin\AppData\Local\vcpkg\archives\ae\include;D:\Boost\boost_1_87_0;$(SolutionDir)MyLibrary;$(SolutionDir)MyLibrary_DLL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\Boost\boost_1_87_0\stage\lib;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libboost_context-vc143-mt-gd-x64-1_87.lib;MyLibrary.lib;MyLibrary_DLL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -126,67 +116,23 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>USER_NONDEBUG;ASSERTIONS_ENABLED;SIMD_DEMO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Admin\AppData\Local\vcpkg\archives\ae\include;D:\Boost\boost_1_87_0;$(SolutionDir)MyLibrary;$(SolutionDir)MyLibrary_DLL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\Boost\boost_1_87_0\stage\lib;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libboost_context-vc143-mt-gd-x64-1_87.lib;MyLibrary.lib;MyLibrary_DLL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Implicit Parallelism\Linkage.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Implicit Parallelism\Predication.cpp" />
-    <ClCompile Include="Handmade Context Switch\stack_context.cpp" />
-    <ClCompile Include="Non-Blocking Programming\Memory Ordering Semantics\BasicSpinLock\BasicSpinLock.cpp" />
-    <ClCompile Include="Non-Blocking Programming\Memory Ordering Semantics\Demo_MO_Semantics.cpp" />
-    <ClCompile Include="Non-Blocking Programming\Memory Ordering Semantics\Lock-Free Linked List\LF_LinkedList.cpp" />
-    <ClCompile Include="Non-Blocking Programming\Memory Ordering Semantics\Lock-Not-Needed Assertion\UnnecessaryLock.cpp" />
-    <ClCompile Include="Non-Blocking Programming\Memory Ordering Semantics\ReentrantLock32\ReentrantLock32.cpp" />
-    <ClCompile Include="Non-Blocking Programming\Non_Blocking_Programming.cpp" />
-    <ClCompile Include="Non-Blocking Programming\SpinLock\CAS.cpp" />
-    <ClCompile Include="Non-Blocking Programming\SpinLock\LL_SC.cpp" />
-    <ClCompile Include="Non-Blocking Programming\SpinLock\SpinLockTAS_ReentrantLock.cpp" />
-    <ClCompile Include="Non-Blocking Programming\SpinLock\SpinLockXCHG.cpp" />
-    <ClCompile Include="OS Fundamentals\Thread.cpp" />
-    <ClCompile Include="SIMD\Demo_SIMD.cpp" />
-    <ClCompile Include="Thread Synchronization Primitives\Dining_Philosophers\DP_Central_Arbiter\CentralArbiter.cpp" />
-    <ClCompile Include="Thread Synchronization Primitives\Dining_Philosophers\DP_Central_Arbiter\DP_CentralArbiter.cpp" />
-    <ClCompile Include="Thread Synchronization Primitives\Dining_Philosophers\DP_Global_Order\DP_Global_Order.cpp" />
-    <ClCompile Include="Thread Synchronization Primitives\Dining_Philosophers\DP_NMinus1_Philo\DP_NMinus1_Philo.cpp" />
-    <ClCompile Include="Thread Synchronization Primitives\HandmadeSemaphore\HandmadeSemaphore.cpp" />
-    <ClCompile Include="Thread Synchronization Primitives\ResourcePool\ResourcePool.cpp" />
-    <ClCompile Include="Thread Synchronization Primitives\Producer_Consumers_Semaphores.cpp" />
-    <ClCompile Include="Thread Synchronization Primitives\ResourcePool\ResourcePool_Semaphores.cpp" />
-    <ClCompile Include="Thread Synchronization Primitives\ThreadSyncPrimi.cpp" />
+    <ClInclude Include="MyLibrary\MyLibrary.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Implicit Parallelism\Linkage.h" />
-    <ClInclude Include="Handmade Context Switch\stack_context.h" />
-    <ClInclude Include="Non-Blocking Programming\Memory Ordering Semantics\BasicSpinLock\BasicSpinLock.h" />
-    <ClInclude Include="Non-Blocking Programming\Memory Ordering Semantics\Lock-Free Linked List\LF_LinkedList.h" />
-    <ClInclude Include="Non-Blocking Programming\Memory Ordering Semantics\Lock-Not-Needed Assertion\UnnecessaryLock.h" />
-    <ClInclude Include="Non-Blocking Programming\Memory Ordering Semantics\ReentrantLock32\ReentrantLock32.h" />
-    <ClInclude Include="Non-Blocking Programming\Memory Ordering Semantics\ScopedLock\ScopedLock.h" />
-    <ClInclude Include="Thread Synchronization Primitives\Dining_Philosophers\DP_Central_Arbiter\CentralArbiter.h" />
-    <ClInclude Include="Thread Synchronization Primitives\Dining_Philosophers\DP_Common.h" />
-    <ClInclude Include="Thread Synchronization Primitives\HandmadeSemaphore\HandmadeSemaphore.h" />
-    <ClInclude Include="Thread Synchronization Primitives\ResourcePool\ResourcePool.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <MASM Include="Handmade Context Switch\context_switch.asm" />
+    <ClCompile Include="MyLibrary\MyLibrary.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
   </ImportGroup>
 </Project>
