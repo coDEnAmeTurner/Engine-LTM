@@ -4,9 +4,10 @@
 #include <Windows.h>
 #include <string>
 #include <thread>
-#include "stack_context.h"
+//#include "stack_context.h"
 #include <intrin.h>
 #include <boost/context/continuation.hpp>
+#include <coroutine>
 
 struct multiple_params {
 	std::uint32_t ui32;
@@ -293,6 +294,23 @@ ctx::continuation coroutine1(ctx::continuation&& c) {
 }
 
 #pragma endregion
+#pragma region C++ 11 Coroutine
+struct ReturnObject {
+	struct promise_type {
+		std::suspend_never initial_suspend() { return {}; }
+		std::suspend_never final_suspend() noexcept { return {}; }
+		ReturnObject get_return_object() { return {}; }
+		void return_void(){}
+		void unhandled_exception() {}
+	};
+};
+
+ReturnObject foo() {
+	std::cout << "1. Hello from coroutine\n";
+	co_await std::suspend_always{};
+	std::cout << "2. hello from coroutine\n";
+}
+#pragma endregion
 
 
 void test_parallel_concurrency() {
@@ -463,9 +481,10 @@ void test_parallel_concurrency() {
 	std::cout << "After std::cout, Stack pointer: " << rsp_after << "\n";*/
 
 	//Using coroutine in Boost libary
-	ctx::continuation c = ctx::callcc(coroutine1);
-	std::cout << "Main: Coroutines finsihed " << std::endl;
+	/*ctx::continuation c = ctx::callcc(coroutine1);
+	std::cout << "Main: Coroutines finsihed " << std::endl;*/
 
+	foo();
 }
 
 #endif

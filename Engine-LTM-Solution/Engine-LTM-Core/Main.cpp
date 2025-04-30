@@ -616,12 +616,12 @@ int main() {
 
 	//std::cout << max(1, 2) << std::endl;
 
-	//test_parallel_concurrency();
+	test_parallel_concurrency();
 
-	//std::cin.get();
+	std::cin.get();
 
-	PrintMessage();
+	//PrintMessage();
 
-	PrintMessage_DLL();
+	//PrintMessage_DLL();
 
 }

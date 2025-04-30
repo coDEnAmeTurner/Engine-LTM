@@ -106,7 +106,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>USER_NONDEBUG;ASSERTIONS_ENABLED;SIMD_DEMO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USER_NONDEBUG;ASSERTIONS_ENABLED;TEST_THREAD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\Admin\AppData\Local\vcpkg\archives\ae\include;D:\Boost\boost_1_87_0;$(SolutionDir)MyLibrary;$(SolutionDir)MyLibrary_DLL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -126,7 +126,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>USER_NONDEBUG;ASSERTIONS_ENABLED;SIMD_DEMO;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>USER_NONDEBUG;ASSERTIONS_ENABLED;TEST_THREAD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\Admin\AppData\Local\vcpkg\archives\ae\include;D:\Boost\boost_1_87_0;$(SolutionDir)MyLibrary;$(SolutionDir)MyLibrary_DLL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
