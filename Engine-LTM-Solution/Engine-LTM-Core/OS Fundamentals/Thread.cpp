@@ -295,23 +295,51 @@ ctx::continuation coroutine1(ctx::continuation&& c) {
 
 #pragma endregion
 #pragma region C++ 11 Coroutine
-struct ReturnObject {
-	struct promise_type {
-		std::suspend_never initial_suspend() { return {}; }
-		std::suspend_never final_suspend() noexcept { return {}; }
-		ReturnObject get_return_object() { return {}; }
-		void return_void(){}
-		void unhandled_exception() {}
-	};
+//coroutine that returns value to the caller:
+//  coroutine gets promise_type object via a specific awaiter
+//	set the value inside promise_type object
+//  caller gets promise_type object via return object
+template<typename PromiseType>
+struct GetPromise {
+	PromiseType* p_;
+
+	bool await_ready(){ return false; }//we want set value first, then continue. SO here we are
+	bool await_suspend(std::coroutine_handle<PromiseType> h) {
+		p_ = &h.promise(); //set
+		return false; //then continue, after this, await_resume comes
+	}
+	PromiseType* await_resume() { return p_; }
 };
 
-ReturnObject foo() {
-	std::cout << "1. Hello from coroutine\n";
-	co_await std::suspend_always{};
-	std::cout << "2. hello from coroutine\n";
+struct ReturnObject {
+	struct promise_type {
+		unsigned value_;
+
+		ReturnObject get_return_object() { return {
+			.h_ = std::coroutine_handle<promise_type>::from_promise(*this)
+		}; }
+		std::suspend_never initial_suspend() { return {}; }
+		std::suspend_never final_suspend() noexcept { return {}; }
+		void unhandled_exception() {}
+		void return_void(){}
+	};
+
+	std::coroutine_handle<promise_type> h_;
+	operator std::coroutine_handle<promise_type>() const { return h_; }
+	// A coroutine_handle<promise_type> converts to coroutine_handle<>
+	operator std::coroutine_handle<>() const { return h_; }
+};
+
+ReturnObject counter() {
+	GetPromise<ReturnObject::promise_type> get_promise;
+	auto pp = co_await get_promise;
+
+	for (unsigned i = 0;; ++i) {
+		pp->value_ = i;
+		co_await std::suspend_always{};
+	}
 }
 #pragma endregion
-
 
 void test_parallel_concurrency() {
 
@@ -484,7 +512,14 @@ void test_parallel_concurrency() {
 	/*ctx::continuation c = ctx::callcc(coroutine1);
 	std::cout << "Main: Coroutines finsihed " << std::endl;*/
 
-	foo();
+	std::coroutine_handle<ReturnObject::promise_type> h = counter();
+	ReturnObject::promise_type& promise = h.promise();
+
+	for (std::uint8_t i = 0; i < 3; i++) {
+		std::cout << "In main1 function: " << promise.value_ << std::endl;
+		h();
+	}
+	h.destroy();
 }
 
 #endif
