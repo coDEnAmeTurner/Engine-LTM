@@ -299,17 +299,6 @@ ctx::continuation coroutine1(ctx::continuation&& c) {
 //  coroutine gets promise_type object via a specific awaiter
 //	set the value inside promise_type object
 //  caller gets promise_type object via return object
-template<typename PromiseType>
-struct GetPromise {
-	PromiseType* p_;
-
-	bool await_ready(){ return false; }//we want set value first, then continue. SO here we are
-	bool await_suspend(std::coroutine_handle<PromiseType> h) {
-		p_ = &h.promise(); //set
-		return false; //then continue, after this, await_resume comes
-	}
-	PromiseType* await_resume() { return p_; }
-};
 
 struct ReturnObject {
 	struct promise_type {
@@ -318,10 +307,16 @@ struct ReturnObject {
 		ReturnObject get_return_object() { return {
 			.h_ = std::coroutine_handle<promise_type>::from_promise(*this)
 		}; }
-		std::suspend_never initial_suspend() { return {}; }
-		std::suspend_never final_suspend() noexcept { return {}; }
+		std::suspend_always initial_suspend() { return {}; }
+		std::suspend_always final_suspend() noexcept { return {}; }
 		void unhandled_exception() {}
-		void return_void(){}
+		void return_value(unsigned value){
+			value_ = value;
+		}
+		std::suspend_always yield_value(unsigned value) {
+			value_ = value;
+			return {};
+		}
 	};
 
 	std::coroutine_handle<promise_type> h_;
@@ -331,12 +326,9 @@ struct ReturnObject {
 };
 
 ReturnObject counter() {
-	GetPromise<ReturnObject::promise_type> get_promise;
-	auto pp = co_await get_promise;
-
 	for (unsigned i = 0;; ++i) {
-		pp->value_ = i;
-		co_await std::suspend_always{};
+		if (i == 3)
+			co_return i;
 	}
 }
 #pragma endregion
@@ -513,12 +505,12 @@ void test_parallel_concurrency() {
 	std::cout << "Main: Coroutines finsihed " << std::endl;*/
 
 	std::coroutine_handle<ReturnObject::promise_type> h = counter();
-	ReturnObject::promise_type& promise = h.promise();
-
-	for (std::uint8_t i = 0; i < 3; i++) {
-		std::cout << "In main1 function: " << promise.value_ << std::endl;
-		h();
+	h();
+	while (!h.done()) {
+		std::cout << "Not done!!!\n";
 	}
+	std::cout << "The value is: " << h.promise().value_ << std::endl;
+	 
 	h.destroy();
 }
 
